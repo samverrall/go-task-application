@@ -13,10 +13,10 @@ This mono-repo holds all each microservice as an individual Go module. Each serv
 See the [Task Service](https://github.com/samverrall/go-task-application/tree/main/task-service) for an example hexagonal (ports and adapters) microservice.
 
 - `internal` 
-		- `domain`
-		- `repositories`
-		- `rest`
-		- `app`
+	- `domain`
+	- `repositories`
+	- `rest`
+	- `app`
 - `pkg`
 	- `utils`
 	- `config`
