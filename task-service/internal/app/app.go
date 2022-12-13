@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/samverrall/task-service/internal/app/api"
 	"github.com/samverrall/task-service/internal/repository"
 	"github.com/samverrall/task-service/internal/rest"
+	"github.com/samverrall/task-service/internal/service"
 	"github.com/samverrall/task-service/internal/sqlite"
 	"github.com/samverrall/task-service/pkg/config"
 	"github.com/samverrall/task-service/pkg/logger"
@@ -45,7 +45,7 @@ func (a *App) Run() error {
 	taskRepo := repository.NewTaskRepo(dbConnection.GetDB())
 
 	// Init business logic
-	taskService := api.NewTaskService(taskRepo, a.logger)
+	taskService := service.NewTaskService(taskRepo, a.logger)
 
 	// Init rest adapter
 	rest := rest.New(a.config.Address)

@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/samverrall/task-service/internal/app/api"
 	"github.com/samverrall/task-service/internal/domain"
+	"github.com/samverrall/task-service/internal/service"
 )
 
-func createTask(ctx context.Context, taskService api.TaskServicer) echo.HandlerFunc {
+func createTask(ctx context.Context, taskService service.TaskServicer) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var task domain.Task
 		if err := c.Bind(&task); err != nil {
@@ -27,6 +27,6 @@ func createTask(ctx context.Context, taskService api.TaskServicer) echo.HandlerF
 	}
 }
 
-func newTaskHandler(ctx context.Context, e *echo.Echo, taskService api.TaskServicer) {
+func newTaskHandler(ctx context.Context, e *echo.Echo, taskService service.TaskServicer) {
 	e.POST("/api/tasks", createTask(ctx, taskService))
 }
