@@ -7,12 +7,12 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/repository"
 	"github.com/samverrall/task-service/internal/rest"
 	"github.com/samverrall/task-service/internal/service"
 	"github.com/samverrall/task-service/internal/sqlite"
 	"github.com/samverrall/task-service/pkg/config"
-	"github.com/samverrall/task-service/pkg/logger"
 )
 
 type App struct {

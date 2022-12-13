@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/domain"
-	"github.com/samverrall/task-service/pkg/logger"
 )
 
 type TaskServicer interface {

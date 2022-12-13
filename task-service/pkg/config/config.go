@@ -8,3 +8,7 @@ type Config struct {
 func New() *Config {
 	return &Config{}
 }
+
+func (c *Config) Parse(configFilePath string) error {
+	return nil
+}

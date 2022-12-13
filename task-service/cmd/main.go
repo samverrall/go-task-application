@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/app"
 	"github.com/samverrall/task-service/pkg/config"
-	"github.com/samverrall/task-service/pkg/logger"
 )
 
 func main() {
