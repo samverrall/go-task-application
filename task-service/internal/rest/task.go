@@ -3,6 +3,7 @@ package rest
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/samverrall/task-service/internal/service"
@@ -22,14 +23,23 @@ func createTask(ctx context.Context, taskService service.TaskServicer) echo.Hand
 		}
 
 		data := service.CreateTaskDTO(input)
-		createdTask, err := taskService.CreateTask(ctx, &data)
+		task, err := taskService.CreateTask(ctx, &data)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, Error{
 				Message: err.Error(),
 			})
 		}
 
-		return c.JSON(http.StatusCreated, createdTask)
+		output := struct {
+			UUID      string `json:"uuid"`
+			Name      string `json:"name"`
+			CreatedAt string `json:"createdAt"`
+		}{
+			Name:      task.Name.String(),
+			UUID:      task.UUID.String(),
+			CreatedAt: task.CreatedAt.Format(time.RFC3339),
+		}
+		return c.JSON(http.StatusCreated, output)
 	}
 }
 
