@@ -2,21 +2,24 @@ package service
 
 import (
 	"context"
-	"fmt"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/domain"
 )
 
 type TaskServicer interface {
-	CreateTask(ctx context.Context, t *domain.Task) (*domain.Task, error)
+	CreateTask(ctx context.Context, taskDTO *CreateTaskDTO) (*domain.Task, error)
 }
 
 type TaskService struct {
 	repo   domain.TaskRepo
 	logger logger.Logger
+}
+
+// CreateTaskDTO is a middleman 'DTO' (Data Transfer Object) to decouple
+// the domains from our ports. This way the port can adapt to the inputs of adapters.
+type CreateTaskDTO struct {
+	Name string
 }
 
 func NewTaskService(repo domain.TaskRepo, log logger.Logger) TaskServicer {
@@ -26,20 +29,15 @@ func NewTaskService(repo domain.TaskRepo, log logger.Logger) TaskServicer {
 	}
 }
 
-func (ts *TaskService) CreateTask(ctx context.Context, t *domain.Task) (*domain.Task, error) {
+func (ts *TaskService) CreateTask(ctx context.Context, taskDTO *CreateTaskDTO) (*domain.Task, error) {
 	ts.logger.Info("ts.CreateTask Invoked")
-	fmt.Printf("")
 
-	if err := t.Validate(); err != nil {
-		ts.logger.Error("Invalid task supplied: %s", err.Error())
+	taskName, err := domain.NewTaskName(taskDTO.Name)
+	if err != nil {
 		return nil, err
 	}
 
-	t.UUID = uuid.NewString()
+	task := domain.NewTask(taskName)
 
-	if t.CreatedAt.IsZero() {
-		t.CreatedAt = time.Now()
-	}
-
-	return ts.repo.CreateTask(ctx, t)
+	return ts.repo.CreateTask(ctx, task)
 }
