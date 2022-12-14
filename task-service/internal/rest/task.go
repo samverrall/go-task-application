@@ -16,7 +16,8 @@ func createTask(ctx context.Context, taskService service.TaskServicer) echo.Hand
 		// DTOs should use primative types, that can map to Object Value types
 		// in the domain.
 		var input struct {
-			Name string `json:"name"`
+			Name       string    `json:"name"`
+			CompleteBy time.Time `json:"completeBy"`
 		}
 		if err := c.Bind(&input); err != nil {
 			return c.JSON(http.StatusBadRequest, nil)
@@ -31,13 +32,15 @@ func createTask(ctx context.Context, taskService service.TaskServicer) echo.Hand
 		}
 
 		output := struct {
-			UUID      string `json:"uuid"`
-			Name      string `json:"name"`
-			CreatedAt string `json:"createdAt"`
+			UUID       string `json:"uuid"`
+			Name       string `json:"name"`
+			CompleteBy string `json:"completeBy"`
+			CreatedAt  string `json:"createdAt"`
 		}{
-			Name:      task.Name.String(),
-			UUID:      task.UUID.String(),
-			CreatedAt: task.CreatedAt.Format(time.RFC3339),
+			Name:       task.Name.String(),
+			UUID:       task.UUID.String(),
+			CompleteBy: task.CompleteBy.Time().Format(time.RFC3339),
+			CreatedAt:  task.CreatedAt.Format(time.RFC3339),
 		}
 		return c.JSON(http.StatusCreated, output)
 	}

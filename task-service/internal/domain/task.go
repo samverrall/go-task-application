@@ -16,20 +16,26 @@ const (
 var (
 	ErrInvalidTaskName  = errors.New("empty task name is not allowed")
 	ErrTaskNameTooSmall = fmt.Errorf("task name must be greater than %d", taskNameMinLength)
+
+	ErrCompleteByTaskEmpty = errors.New("complete by date cannot be empty")
+	ErrCompleteByInPast    = errors.New("task complete by must be in the future")
 )
 
 type Task struct {
 	UUID       uuid.UUID
 	Name       TaskName
 	CreatedAt  time.Time
-	CompleteBy time.Time
+	CompleteBy TaskCompleteBy
 }
 
 type TaskName string
 
-func NewTask(name TaskName) *Task {
+type TaskCompleteBy time.Time
+
+func NewTask(name TaskName, completeBy TaskCompleteBy) *Task {
 	return &Task{
-		Name: name,
+		Name:       name,
+		CompleteBy: completeBy,
 	}
 }
 
@@ -55,4 +61,22 @@ func NewTaskName(name string) (TaskName, error) {
 
 func (tn TaskName) String() string {
 	return string(tn)
+}
+
+func NewTaskCompleteBy(completeBy time.Time) (TaskCompleteBy, error) {
+	out := TaskCompleteBy{}
+
+	if completeBy.IsZero() {
+		return out, ErrCompleteByTaskEmpty
+	}
+
+	if completeBy.Before(time.Now()) {
+		return out, ErrCompleteByInPast
+	}
+
+	return TaskCompleteBy(completeBy), nil
+}
+
+func (cb TaskCompleteBy) Time() time.Time {
+	return time.Time(cb)
 }

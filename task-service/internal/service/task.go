@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/domain"
@@ -19,7 +20,8 @@ type TaskService struct {
 // CreateTaskDTO is a middleman 'DTO' (Data Transfer Object) to decouple
 // the domains from our ports. This way the port can adapt to the inputs of adapters.
 type CreateTaskDTO struct {
-	Name string
+	Name       string
+	CompleteBy time.Time
 }
 
 func NewTaskService(repo domain.TaskRepo, log logger.Logger) TaskServicer {
@@ -37,7 +39,12 @@ func (ts *TaskService) CreateTask(ctx context.Context, taskDTO *CreateTaskDTO) (
 		return nil, err
 	}
 
-	task := domain.NewTask(taskName)
+	taskCompleteBy, err := domain.NewTaskCompleteBy(taskDTO.CompleteBy)
+	if err != nil {
+		return nil, err
+	}
+
+	task := domain.NewTask(taskName, taskCompleteBy)
 
 	return ts.repo.CreateTask(ctx, task)
 }

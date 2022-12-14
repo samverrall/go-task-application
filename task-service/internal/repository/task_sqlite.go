@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/samverrall/task-service/internal/domain"
 	"gorm.io/gorm"
@@ -17,8 +18,25 @@ func NewTaskRepo(db *gorm.DB) domain.TaskRepo {
 	}
 }
 
+type gormTask struct {
+	gorm.Model
+	UUID       string
+	Name       string
+	CreatedAt  time.Time
+	CompleteBy time.Time
+}
+
+func domainToGORM(t *domain.Task) *gormTask {
+	return &gormTask{
+		UUID:       t.UUID.String(),
+		Name:       t.Name.String(),
+		CreatedAt:  t.CreatedAt,
+		CompleteBy: t.CompleteBy.Time(),
+	}
+}
+
 func (tr *TaskRepo) CreateTask(ctx context.Context, t *domain.Task) (*domain.Task, error) {
-	if err := tr.db.Create(t).Error; err != nil {
+	if err := tr.db.Create(domainToGORM(t)).Error; err != nil {
 		return nil, err
 	}
 	return t, nil
