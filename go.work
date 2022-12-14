@@ -4,4 +4,5 @@ use (
 	./task-service
 	./user-service
 	./logger
+	./utils
 )
