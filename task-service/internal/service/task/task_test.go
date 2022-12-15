@@ -33,6 +33,9 @@ func TestCreateServive(t *testing.T) {
 			err := execute(name, completeBy)
 			return err == nil
 		}
-		quick.Check(f, nil)
+		if err := quick.Check(f, nil); err != nil {
+			t.Log(err)
+			t.FailNow()
+		}
 	})
 }

@@ -13,7 +13,7 @@ func createTask(ctx context.Context, taskService task.API) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// input its a DTO (Data Transfer Object) that defines a
 		// specific REST adapter model to be parsed to a domain.Task.
-		// DTOs should use primative types, that can map to Object Value types
+		// DTOs should use primitive types, that can map to Object Value types
 		// in the domain.
 		var input struct {
 			Name       string    `json:"name"`
