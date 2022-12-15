@@ -2,12 +2,9 @@ package service
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"testing"
 	"testing/quick"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/domain"
 )
@@ -23,21 +20,19 @@ func TestCreateServive(t *testing.T) {
 	l := logger.New("debug")
 	taskService := NewTaskService(mockTaskRepo{}, l)
 
-	execute := func(input *CreateTaskDTO) error {
-		_, err := taskService.CreateTask(ctx, input)
+	execute := func(name domain.TaskName, completeBy domain.TaskCompleteBy) error {
+		_, err := taskService.CreateTask(ctx, &CreateTaskDTO{
+			Name:       name.String(),
+			CompleteBy: completeBy.Time(),
+		})
 		return err
 	}
 
-	t.Run("invalid name", func(t *testing.T) {
-		f := func(in *CreateTaskDTO) bool {
-			spew.Dump(in)
-			err := execute(in)
-
-			fmt.Println(errors.Is(err, domain.ErrInvalidTaskName))
-			return errors.Is(err, domain.ErrInvalidTaskName)
+	t.Run("valid inputs", func(t *testing.T) {
+		f := func(name domain.TaskName, completeBy domain.TaskCompleteBy) bool {
+			err := execute(name, completeBy)
+			return err == nil
 		}
-		quick.Check(f, &quick.Config{
-			MaxCount: 100,
-		})
+		quick.Check(f, nil)
 	})
 }
