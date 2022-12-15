@@ -5,10 +5,11 @@ import (
 
 	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/domain"
+	"github.com/samverrall/task-service/internal/domain/task"
 )
 
 type API interface {
-	CreateTask(ctx context.Context, taskDTO CreateTaskDTO) (*domain.Task, error)
+	CreateTask(ctx context.Context, taskDTO CreateTaskDTO) (*task.Task, error)
 }
 
 type TaskService struct {

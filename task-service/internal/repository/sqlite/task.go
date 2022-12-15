@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/samverrall/task-service/internal/domain"
+	"github.com/samverrall/task-service/internal/domain/task"
 	"gorm.io/gorm"
 )
 
@@ -18,7 +19,7 @@ func NewTaskRepo(db *gorm.DB) domain.TaskRepo {
 	}
 }
 
-type gormTask struct {
+type GormTask struct {
 	gorm.Model
 	UUID       string
 	Name       string
@@ -26,8 +27,8 @@ type gormTask struct {
 	CompleteBy time.Time
 }
 
-func domainToGORM(t *domain.Task) *gormTask {
-	return &gormTask{
+func domainToGORM(t *task.Task) *GormTask {
+	return &GormTask{
 		UUID:       t.UUID.String(),
 		Name:       t.Name.String(),
 		CreatedAt:  t.CreatedAt,
@@ -35,7 +36,7 @@ func domainToGORM(t *domain.Task) *gormTask {
 	}
 }
 
-func (tr *TaskRepo) Add(ctx context.Context, t *domain.Task) (*domain.Task, error) {
+func (tr *TaskRepo) Add(ctx context.Context, t *task.Task) (*task.Task, error) {
 	if err := tr.db.Create(domainToGORM(t)).Error; err != nil {
 		return nil, err
 	}

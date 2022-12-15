@@ -6,12 +6,12 @@ import (
 	"testing/quick"
 
 	"github.com/samverrall/go-task-application/logger"
-	"github.com/samverrall/task-service/internal/domain"
+	"github.com/samverrall/task-service/internal/domain/task"
 )
 
 type mockTaskRepo struct{}
 
-func (mt mockTaskRepo) Add(ctx context.Context, t *domain.Task) (*domain.Task, error) {
+func (mt mockTaskRepo) Add(ctx context.Context, t *task.Task) (*task.Task, error) {
 	return t, nil
 }
 
@@ -20,7 +20,7 @@ func TestCreateServive(t *testing.T) {
 	l := logger.New("debug")
 	taskService := NewService(mockTaskRepo{}, l)
 
-	execute := func(name domain.TaskName, completeBy domain.TaskCompleteBy) error {
+	execute := func(name task.Name, completeBy task.CompleteBy) error {
 		_, err := taskService.CreateTask(ctx, CreateTaskDTO{
 			Name:       name.String(),
 			CompleteBy: completeBy.Time(),
@@ -29,7 +29,7 @@ func TestCreateServive(t *testing.T) {
 	}
 
 	t.Run("valid inputs", func(t *testing.T) {
-		f := func(name domain.TaskName, completeBy domain.TaskCompleteBy) bool {
+		f := func(name task.Name, completeBy task.CompleteBy) bool {
 			err := execute(name, completeBy)
 			return err == nil
 		}

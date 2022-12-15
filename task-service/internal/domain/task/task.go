@@ -1,4 +1,4 @@
-package domain
+package task
 
 import (
 	"errors"
@@ -23,16 +23,16 @@ var (
 
 type Task struct {
 	UUID       uuid.UUID
-	Name       TaskName
+	Name       Name
 	CreatedAt  time.Time
-	CompleteBy TaskCompleteBy
+	CompleteBy CompleteBy
 }
 
-type TaskName string
+type Name string
 
-type TaskCompleteBy time.Time
+type CompleteBy time.Time
 
-func NewTask(name TaskName, completeBy TaskCompleteBy) *Task {
+func New(name Name, completeBy CompleteBy) *Task {
 	return &Task{
 		Name:       name,
 		CompleteBy: completeBy,
@@ -47,7 +47,7 @@ func NewTask(name TaskName, completeBy TaskCompleteBy) *Task {
 // It also means the aggregate root is free to focus only on business logic,
 // which data validation is not.
 // All the input validation is centralised in one place.
-func NewTaskName(name string) (TaskName, error) {
+func NewName(name string) (Name, error) {
 	if strings.TrimSpace(name) == "" {
 		return "", ErrInvalidTaskName
 	}
@@ -56,15 +56,15 @@ func NewTaskName(name string) (TaskName, error) {
 		return "", ErrTaskNameTooSmall
 	}
 
-	return TaskName(name), nil
+	return Name(name), nil
 }
 
-func (tn TaskName) String() string {
+func (tn Name) String() string {
 	return string(tn)
 }
 
-func NewTaskCompleteBy(completeBy time.Time) (TaskCompleteBy, error) {
-	out := TaskCompleteBy{}
+func NewCompleteBy(completeBy time.Time) (CompleteBy, error) {
+	out := CompleteBy{}
 
 	if completeBy.IsZero() {
 		return out, ErrCompleteByTaskEmpty
@@ -74,9 +74,9 @@ func NewTaskCompleteBy(completeBy time.Time) (TaskCompleteBy, error) {
 		return out, ErrCompleteByInPast
 	}
 
-	return TaskCompleteBy(completeBy), nil
+	return CompleteBy(completeBy), nil
 }
 
-func (cb TaskCompleteBy) Time() time.Time {
+func (cb CompleteBy) Time() time.Time {
 	return time.Time(cb)
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/samverrall/task-service/internal/domain"
+	"github.com/samverrall/task-service/internal/domain/task"
 )
 
 type CreateTaskGuard interface {
@@ -18,20 +18,20 @@ type CreateTaskDTO struct {
 	CompleteBy time.Time
 }
 
-func (ts *TaskService) CreateTask(ctx context.Context, taskDTO CreateTaskDTO) (*domain.Task, error) {
+func (ts *TaskService) CreateTask(ctx context.Context, taskDTO CreateTaskDTO) (*task.Task, error) {
 	ts.logger.Info("ts.CreateTask Invoked")
 
-	taskName, err := domain.NewTaskName(taskDTO.Name)
+	taskName, err := task.NewName(taskDTO.Name)
 	if err != nil {
 		return nil, err
 	}
 
-	taskCompleteBy, err := domain.NewTaskCompleteBy(taskDTO.CompleteBy)
+	taskCompleteBy, err := task.NewCompleteBy(taskDTO.CompleteBy)
 	if err != nil {
 		return nil, err
 	}
 
-	task := domain.NewTask(taskName, taskCompleteBy)
+	task := task.New(taskName, taskCompleteBy)
 
 	return ts.repo.Add(ctx, task)
 }
