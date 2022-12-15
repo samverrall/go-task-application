@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/samverrall/task-service/internal/domain/task"
 )
 
@@ -31,7 +32,8 @@ func (ts *TaskService) CreateTask(ctx context.Context, taskDTO CreateTaskDTO) (*
 		return nil, err
 	}
 
-	task := task.New(taskName, taskCompleteBy)
+	id := uuid.New()
+	task := task.New(id, taskName, taskCompleteBy)
 
 	return ts.repo.Add(ctx, task)
 }

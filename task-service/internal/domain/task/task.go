@@ -32,8 +32,9 @@ type Name string
 
 type CompleteBy time.Time
 
-func New(name Name, completeBy CompleteBy) *Task {
-	return &Task{
+func New(uuid uuid.UUID, name Name, completeBy CompleteBy) Task {
+	return Task{
+		UUID:       uuid,
 		Name:       name,
 		CompleteBy: completeBy,
 	}

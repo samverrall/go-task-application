@@ -7,5 +7,5 @@ import (
 )
 
 type TaskRepo interface {
-	Add(ctx context.Context, t *task.Task) (*task.Task, error)
+	Add(ctx context.Context, t task.Task) (*task.Task, error)
 }

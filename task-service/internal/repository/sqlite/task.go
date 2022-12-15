@@ -27,7 +27,7 @@ type GormTask struct {
 	CompleteBy time.Time
 }
 
-func domainToGORM(t *task.Task) *GormTask {
+func domainToGORM(t task.Task) *GormTask {
 	return &GormTask{
 		UUID:       t.UUID.String(),
 		Name:       t.Name.String(),
@@ -36,9 +36,9 @@ func domainToGORM(t *task.Task) *GormTask {
 	}
 }
 
-func (tr *TaskRepo) Add(ctx context.Context, t *task.Task) (*task.Task, error) {
+func (tr *TaskRepo) Add(ctx context.Context, t task.Task) (*task.Task, error) {
 	if err := tr.db.Create(domainToGORM(t)).Error; err != nil {
 		return nil, err
 	}
-	return t, nil
+	return &t, nil
 }

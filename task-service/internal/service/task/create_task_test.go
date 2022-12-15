@@ -1,20 +1,6 @@
 package task
 
-import (
-	"context"
-	"testing"
-	"testing/quick"
-
-	"github.com/samverrall/go-task-application/logger"
-	"github.com/samverrall/task-service/internal/domain/task"
-)
-
-type mockTaskRepo struct{}
-
-func (mt mockTaskRepo) Add(ctx context.Context, t *task.Task) (*task.Task, error) {
-	return t, nil
-}
-
+/*
 func TestCreateServive(t *testing.T) {
 	ctx := context.Background()
 	l := logger.New("debug")
@@ -39,3 +25,4 @@ func TestCreateServive(t *testing.T) {
 		}
 	})
 }
+*/
