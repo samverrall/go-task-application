@@ -1,4 +1,4 @@
-package service
+package task
 
 import (
 	"context"
@@ -11,17 +11,17 @@ import (
 
 type mockTaskRepo struct{}
 
-func (mt mockTaskRepo) CreateTask(ctx context.Context, t *domain.Task) (*domain.Task, error) {
+func (mt mockTaskRepo) Add(ctx context.Context, t *domain.Task) (*domain.Task, error) {
 	return t, nil
 }
 
 func TestCreateServive(t *testing.T) {
 	ctx := context.Background()
 	l := logger.New("debug")
-	taskService := NewTaskService(mockTaskRepo{}, l)
+	taskService := NewService(mockTaskRepo{}, l)
 
 	execute := func(name domain.TaskName, completeBy domain.TaskCompleteBy) error {
-		_, err := taskService.CreateTask(ctx, &CreateTaskDTO{
+		_, err := taskService.CreateTask(ctx, CreateTaskDTO{
 			Name:       name.String(),
 			CompleteBy: completeBy.Time(),
 		})

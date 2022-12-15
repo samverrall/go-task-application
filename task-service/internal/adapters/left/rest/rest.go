@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/samverrall/task-service/internal/service"
+	"github.com/samverrall/task-service/internal/service/task"
 )
 
 type Rest struct {
@@ -27,7 +27,7 @@ func (r *Rest) InitMiddleware() {
 	r.echo.Use(middleware.Recover())
 }
 
-func (r *Rest) InitHandlers(ctx context.Context, tasksService service.TaskServicer) {
+func (r *Rest) InitHandlers(ctx context.Context, tasksService task.API) {
 	newTaskHandler(ctx, r.echo, tasksService)
 }
 

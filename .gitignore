@@ -1,6 +1,6 @@
 .DS_STORE 
 
 *.db
-task-service-bin
+task-rest-service
 user-service-bin
 

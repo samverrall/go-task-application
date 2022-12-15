@@ -1,4 +1,4 @@
-package repository
+package sqlite
 
 import (
 	"context"
@@ -35,7 +35,7 @@ func domainToGORM(t *domain.Task) *gormTask {
 	}
 }
 
-func (tr *TaskRepo) CreateTask(ctx context.Context, t *domain.Task) (*domain.Task, error) {
+func (tr *TaskRepo) Add(ctx context.Context, t *domain.Task) (*domain.Task, error) {
 	if err := tr.db.Create(domainToGORM(t)).Error; err != nil {
 		return nil, err
 	}
