@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/samverrall/task-service/internal/domain"
-	"github.com/samverrall/task-service/internal/domain/task"
+	"github.com/samverrall/task-service/internal/port/domain"
+	"github.com/samverrall/task-service/internal/port/domain/task"
 )
 
 type TaskRepoMock struct {

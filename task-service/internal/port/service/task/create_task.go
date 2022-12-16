@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/samverrall/task-service/internal/domain/task"
+	"github.com/samverrall/task-service/internal/port/domain/task"
 )
 
 type CreateTaskGuard interface {

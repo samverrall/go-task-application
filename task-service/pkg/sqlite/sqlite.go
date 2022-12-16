@@ -3,7 +3,6 @@ package sqlite
 import (
 	"fmt"
 
-	"github.com/samverrall/task-service/internal/repository/sqlite"
 	driver "gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -12,8 +11,8 @@ type SQLiteDB struct {
 	db *gorm.DB
 }
 
-func Connect(databaseDir string) (*SQLiteDB, error) {
-	db, err := gorm.Open(driver.Open(databaseDir), &gorm.Config{})
+func Connect(database string) (*SQLiteDB, error) {
+	db, err := gorm.Open(driver.Open(database), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("%w: failed to open gorm connection", err)
 	}
@@ -27,5 +26,5 @@ func (sq *SQLiteDB) GetDB() *gorm.DB {
 }
 
 func (sq *SQLiteDB) Migrate() error {
-	return sq.db.AutoMigrate(sqlite.GormTask{})
+	return nil
 }

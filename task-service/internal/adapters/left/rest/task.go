@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/samverrall/task-service/internal/service/task"
+	"github.com/samverrall/task-service/internal/port/service/task"
 )
 
-func createTask(ctx context.Context, taskService task.API) echo.HandlerFunc {
+func (r *Rest) createTask(ctx context.Context) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		// input its a DTO (Data Transfer Object) that defines a
 		// specific REST adapter model to be parsed to a domain.Task.
@@ -24,7 +24,7 @@ func createTask(ctx context.Context, taskService task.API) echo.HandlerFunc {
 		}
 
 		data := task.CreateTaskDTO(input)
-		task, err := taskService.CreateTask(ctx, data)
+		task, err := r.tasksService.CreateTask(ctx, data)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, Error{
 				Message: err.Error(),
@@ -46,6 +46,6 @@ func createTask(ctx context.Context, taskService task.API) echo.HandlerFunc {
 	}
 }
 
-func newTaskHandler(ctx context.Context, e *echo.Echo, taskService task.API) {
-	e.POST("/api/tasks", createTask(ctx, taskService))
+func (r *Rest) newTaskHandler(ctx context.Context) {
+	r.echo.POST("/api/tasks", r.createTask(ctx))
 }

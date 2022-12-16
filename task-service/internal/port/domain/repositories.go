@@ -3,7 +3,7 @@ package domain
 import (
 	"context"
 
-	"github.com/samverrall/task-service/internal/domain/task"
+	"github.com/samverrall/task-service/internal/port/domain/task"
 )
 
 type TaskRepo interface {

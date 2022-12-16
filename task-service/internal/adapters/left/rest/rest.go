@@ -6,32 +6,31 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/samverrall/task-service/internal/service/task"
+	"github.com/samverrall/task-service/internal/port/service/task"
 )
 
 type Rest struct {
-	echo    *echo.Echo
-	address string
+	echo         *echo.Echo
+	address      string
+	tasksService task.API
 }
 
-func New(address string) *Rest {
+func New(address string, taskService task.API) *Rest {
 	e := echo.New()
 	return &Rest{
-		echo:    e,
-		address: address,
+		echo:         e,
+		address:      address,
+		tasksService: taskService,
 	}
 }
 
-func (r *Rest) InitMiddleware() {
+func (r *Rest) Start(ctx context.Context) error {
 	r.echo.Use(middleware.Logger())
 	r.echo.Use(middleware.Recover())
-}
 
-func (r *Rest) InitHandlers(ctx context.Context, tasksService task.API) {
-	newTaskHandler(ctx, r.echo, tasksService)
-}
+	// Register API Handlers
+	r.newTaskHandler(ctx)
 
-func (r *Rest) Start(ctx context.Context) error {
 	if err := r.echo.Start(r.address); err != nil {
 		return fmt.Errorf("%w: failed to start server", err)
 	}

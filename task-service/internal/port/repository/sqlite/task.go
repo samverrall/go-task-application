@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/samverrall/task-service/internal/domain"
-	"github.com/samverrall/task-service/internal/domain/task"
+	"github.com/samverrall/task-service/internal/port/domain"
+	"github.com/samverrall/task-service/internal/port/domain/task"
 	"gorm.io/gorm"
 )
 

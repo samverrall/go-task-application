@@ -10,10 +10,10 @@ import (
 
 	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/adapters/left/rest"
-	sqliteAdapter "github.com/samverrall/task-service/internal/adapters/right/sqlite"
-	"github.com/samverrall/task-service/internal/repository/sqlite"
-	"github.com/samverrall/task-service/internal/service/task"
+	"github.com/samverrall/task-service/internal/adapters/right/task/sqlite"
+	"github.com/samverrall/task-service/internal/port/service/task"
 	"github.com/samverrall/task-service/pkg/config"
+	sqliteDB "github.com/samverrall/task-service/pkg/sqlite"
 )
 
 func run() error {
@@ -23,8 +23,8 @@ func run() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	// Init DB adapter
-	dbConnection, err := sqliteAdapter.Connect(c.DBDirectory)
+	// Init SQLite
+	dbConnection, err := sqliteDB.Connect(c.DBDirectory)
 	if err != nil {
 		return err
 	}
@@ -33,16 +33,14 @@ func run() error {
 		return fmt.Errorf("%w: failed to migrate database", err)
 	}
 
-	// Init repos
+	// Init driven DB (right adapter)
 	taskRepo := sqlite.NewTaskRepo(dbConnection.GetDB())
 
 	// Init business logic
 	taskService := task.NewService(taskRepo, log)
 
-	// Init rest adapter
-	rest := rest.New(c.Address)
-	rest.InitMiddleware()
-	rest.InitHandlers(ctx, taskService)
+	// Init driving adapter (left adapter)
+	rest := rest.New(c.Address, taskService)
 	if err := rest.Start(ctx); err != nil {
 		return fmt.Errorf("%w: failed to start http server", err)
 	}
