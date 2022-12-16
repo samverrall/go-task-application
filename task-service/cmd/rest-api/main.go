@@ -29,12 +29,11 @@ func run() error {
 		return err
 	}
 
-	if err := dbConnection.Migrate(); err != nil {
-		return fmt.Errorf("%w: failed to migrate database", err)
-	}
-
 	// Init driven DB (right adapter)
-	taskRepo := sqlite.NewTaskRepo(dbConnection.GetDB())
+	taskRepo, err := sqlite.NewTaskRepo(dbConnection.GetDB())
+	if err != nil {
+		return fmt.Errorf("%w: failed to create new task sqlite repo", err)
+	}
 
 	// Init business logic
 	taskService := task.NewService(taskRepo, log)

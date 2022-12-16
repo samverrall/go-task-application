@@ -2,5 +2,5 @@
 
 *.db
 task-rest-service
-user-service-bin
+user-service-grpc
 
