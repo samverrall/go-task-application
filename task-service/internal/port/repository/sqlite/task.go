@@ -13,13 +13,20 @@ type TaskRepo struct {
 	db *gorm.DB
 }
 
-func NewTaskRepo(db *gorm.DB) domain.TaskRepo {
+func NewTaskRepo(db *gorm.DB) (domain.TaskRepo, error) {
+	if err := migrate(db); err != nil {
+		return nil, err
+	}
 	return &TaskRepo{
 		db: db,
-	}
+	}, nil
 }
 
-type GormTask struct {
+func migrate(db *gorm.DB) error {
+	return db.AutoMigrate(gormTask{})
+}
+
+type gormTask struct {
 	gorm.Model
 	UUID       string
 	Name       string
@@ -27,8 +34,8 @@ type GormTask struct {
 	CompleteBy time.Time
 }
 
-func domainToGORM(t task.Task) *GormTask {
-	return &GormTask{
+func domainToGORM(t task.Task) *gormTask {
+	return &gormTask{
 		UUID:       t.UUID.String(),
 		Name:       t.Name.String(),
 		CreatedAt:  t.CreatedAt,

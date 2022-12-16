@@ -10,7 +10,7 @@ import (
 
 	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/task-service/internal/adapters/left/rest"
-	"github.com/samverrall/task-service/internal/adapters/right/task/sqlite"
+	"github.com/samverrall/task-service/internal/adapters/right/repo/task/sqlite"
 	"github.com/samverrall/task-service/internal/port/service/task"
 	"github.com/samverrall/task-service/pkg/config"
 	sqliteDB "github.com/samverrall/task-service/pkg/sqlite"

@@ -15,6 +15,8 @@ func TestTask(t *testing.T) {
 
 	conn := db.GetDB()
 
-	repo := sqlite.NewTaskRepo(conn)
+	repo, err := sqlite.NewTaskRepo(conn)
+	assert.NoError(t, err, "failed to make new task repo")
+
 	repotest.RunTaskTests(t, repo)
 }
