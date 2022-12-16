@@ -5,17 +5,17 @@ import (
 	"net"
 
 	"github.com/samverrall/go-task-application/logger"
-	"github.com/samverrall/go-task-application/user-service/internal/service"
+	"github.com/samverrall/go-task-application/user-service/internal/port/service/user"
 	"google.golang.org/grpc"
 )
 
 type GRPC struct {
 	logger      logger.Logger
-	userService service.UserServicer
+	userService user.API
 	port        int
 }
 
-func New(userSvc service.UserServicer, logger logger.Logger, port int) *GRPC {
+func New(userSvc user.API, logger logger.Logger, port int) *GRPC {
 	return &GRPC{
 		logger:      logger,
 		userService: userSvc,

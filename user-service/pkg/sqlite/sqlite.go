@@ -1,9 +1,8 @@
-package sqlite
+package sqliteconn
 
 import (
 	"fmt"
 
-	"github.com/samverrall/go-task-application/user-service/internal/domain"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -24,8 +23,4 @@ func Connect(databaseDir string) (*SQLiteDB, error) {
 
 func (sq *SQLiteDB) GetDB() *gorm.DB {
 	return sq.db
-}
-
-func (sq *SQLiteDB) Migrate() error {
-	return sq.db.AutoMigrate(domain.User{})
 }
