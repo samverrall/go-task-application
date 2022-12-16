@@ -29,7 +29,7 @@ func run(grpcPort int, database string) error {
 	// Init right sqlite repo
 	userRepo, err := sqlite.NewUserRepo(sqliteAdapter.GetDB())
 	if err != nil {
-		log.Error("failed to init new sqlite user repo: %w", err)
+		log.Error("failed to init new sqlite user repo: %v", err)
 		return err
 	}
 

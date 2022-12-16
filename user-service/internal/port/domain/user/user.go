@@ -36,6 +36,10 @@ func NewEmail(email string) (Email, error) {
 	return Email(email), nil
 }
 
+func (e Email) String() string {
+	return string(e)
+}
+
 type Password string
 
 func NewPassword(password string) (Password, error) {
