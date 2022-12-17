@@ -10,7 +10,7 @@ import (
 func (g *GRPC) GetUserEmail(ctx context.Context, request *gen.GetUserEmailRequest) (*gen.GetUserEmailResponse, error) {
 	g.logger.Info("GetUserEmail Invoked")
 
-	user, err := g.userService.GetUser(ctx, user.GetUserDTO{
+	user, err := g.userService.GetUser(ctx, user.GetUserRequest{
 		UserUUID: request.UserUuid,
 	})
 	if err != nil {
@@ -18,6 +18,6 @@ func (g *GRPC) GetUserEmail(ctx context.Context, request *gen.GetUserEmailReques
 	}
 
 	return &gen.GetUserEmailResponse{
-		Email: user.Email.String(),
+		Email: user.Email,
 	}, nil
 }
