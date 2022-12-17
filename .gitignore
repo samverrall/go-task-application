@@ -1,5 +1,6 @@
 .DS_STORE 
 
+todo.txt
 *.db
 task-rest-service
 user-service-grpc

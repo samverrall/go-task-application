@@ -19,7 +19,7 @@ type GetUserRequest struct {
 }
 
 type GetUserResponse struct {
-	ID       string
+	UUID     string
 	Email    string
 	Password string
 }
@@ -38,11 +38,11 @@ func (us *UserService) GetUser(ctx context.Context, userDTO GetUserRequest, guar
 
 	got, err := us.repo.Get(ctx, uuid)
 	if err != nil {
-
+		return nil, err
 	}
 
 	return &GetUserResponse{
-		ID:    got.ID.String(),
+		UUID:  got.UUID.String(),
 		Email: got.Email.String(),
 	}, nil
 }

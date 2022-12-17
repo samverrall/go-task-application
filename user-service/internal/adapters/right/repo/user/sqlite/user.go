@@ -28,7 +28,9 @@ func migrate(db *gorm.DB) error {
 
 type gormUser struct {
 	gorm.Model
-	Email string
+	UUID     string
+	Email    string
+	Password string
 }
 
 func (ur *UserRepo) Get(ctx context.Context, uuid uuid.UUID) (*user.User, error) {

@@ -8,7 +8,7 @@ import (
 )
 
 type API interface {
-	GetUser(context.Context, GetUserRequest) (*GetUserResponse, error)
+	GetUser(context.Context, GetUserRequest, GetUserGuard) (*GetUserResponse, error)
 }
 
 type UserService struct {
