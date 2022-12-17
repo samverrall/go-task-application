@@ -1,0 +1,20 @@
+syntax="proto3";
+
+package go.taskapplication.proto.common; 
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/samverrall/go-task-application/task-application-proto/gen";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+        version: "1.0";
+    };
+    external_docs: {
+        url: "https://github.com/samverrall/go-task-application";
+        description: "go-task-application repository";
+    }
+    schemes: HTTPS;
+};
+
