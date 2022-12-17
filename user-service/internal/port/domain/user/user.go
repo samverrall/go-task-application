@@ -11,8 +11,8 @@ type User struct {
 	Password Password
 }
 
-func New(id uuid.UUID, email Email, password Password) *User {
-	return &User{
+func New(id uuid.UUID, email Email, password Password) User {
+	return User{
 		UUID:     id,
 		Email:    email,
 		Password: password,

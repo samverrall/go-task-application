@@ -9,4 +9,5 @@ import (
 
 type UserRepo interface {
 	Get(context.Context, uuid.UUID) (*user.User, error)
+	Add(context.Context, user.User) error
 }

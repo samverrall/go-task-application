@@ -18,13 +18,13 @@ type GetUserRequest struct {
 	UserUUID string
 }
 
-type GetUserResponse struct {
+type getUserResponse struct {
 	UUID     string
 	Email    string
 	Password string
 }
 
-func (us *UserService) GetUser(ctx context.Context, userDTO GetUserRequest, guard GetUserGuard) (*GetUserResponse, error) {
+func (us *UserService) GetUser(ctx context.Context, userDTO GetUserRequest, guard GetUserGuard) (*getUserResponse, error) {
 	us.logger.Info("us.CreateUser Invoked")
 
 	if authorised := guard.CanGetUser(); !authorised {
@@ -41,7 +41,7 @@ func (us *UserService) GetUser(ctx context.Context, userDTO GetUserRequest, guar
 		return nil, err
 	}
 
-	return &GetUserResponse{
+	return &getUserResponse{
 		UUID:  got.UUID.String(),
 		Email: got.Email.String(),
 	}, nil

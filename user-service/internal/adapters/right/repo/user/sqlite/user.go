@@ -33,6 +33,13 @@ type gormUser struct {
 	Password string
 }
 
+func (ur *UserRepo) Add(ctx context.Context, in user.User) error {
+	if err := ur.db.Create(userToGorm(in)).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (ur *UserRepo) Get(ctx context.Context, uuid uuid.UUID) (*user.User, error) {
 	result := gormUser{}
 	if err := ur.db.Where("uuid = ?", uuid.String()).Find(&result).Error; err != nil {
