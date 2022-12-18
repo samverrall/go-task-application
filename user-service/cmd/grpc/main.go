@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -55,7 +56,12 @@ func run(grpcPort int, database string) error {
 }
 
 func main() {
-	if err := run(8000, "users.db"); err != nil {
+	var port int
+	var dbDir string
+	flag.IntVar(&port, "grpc-port", 8000, "The port to run the gRPC server on")
+	flag.StringVar(&dbDir, "database-dir", "./users.db", "The directory store application data")
+	flag.Parse()
+	if err := run(port, dbDir); err != nil {
 		log.Fatal(err)
 	}
 }
