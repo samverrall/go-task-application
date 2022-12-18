@@ -4,6 +4,8 @@ A Task Management web application written in Golang microservices using the hexa
 
 This mono-repo holds all each microservice as an individual Go module. Each service holds a Dockerfile for containerization.
 
+![](docs/diagram.png)
+
 ## Services 
 
 `task-service` - [README](https://github.com/samverrall/go-task-application/blob/main/task-service/README.md)
