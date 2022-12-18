@@ -1,10 +1,7 @@
 version: v1
 plugins: 
-  - name: go 
-    out: ./gen 
-    opt: paths=source_relative
   - remote: buf.build/protocolbuffers/plugins/go:v1.28.0-1
-    out: .gen/
+    out: ./gen
     opt: paths=source_relative
   - remote: buf.build/grpc/plugins/go:v1.2.0-1
     out: ./gen
