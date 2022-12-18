@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 
-	gen "github.com/samverrall/go-task-application/user-service/internal/adapters/left/grpc/gen/proto"
 	"github.com/samverrall/go-task-application/user-service/internal/port/service/user"
 )
 

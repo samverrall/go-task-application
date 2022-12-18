@@ -5,4 +5,5 @@ use (
 	./user-service
 	./logger
 	./utils
+	./task-application-proto
 )

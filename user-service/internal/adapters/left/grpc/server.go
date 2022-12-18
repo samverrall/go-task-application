@@ -5,7 +5,7 @@ import (
 	"net"
 
 	"github.com/samverrall/go-task-application/logger"
-	gen "github.com/samverrall/go-task-application/user-service/internal/adapters/left/grpc/gen/proto"
+	gen "github.com/samverrall/go-task-application/task-application-proto/gen"
 	"github.com/samverrall/go-task-application/user-service/internal/port/service/user"
 	"google.golang.org/grpc"
 )

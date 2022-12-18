@@ -30,5 +30,6 @@ func (us *UserService) Register(ctx context.Context, in RegisterRequest) error {
 
 	newUser := user.New(uuid, email, password)
 
-	return us.repo.Add(ctx, newUser)
+	_, err = us.repo.Add(ctx, newUser)
+	return err
 }
