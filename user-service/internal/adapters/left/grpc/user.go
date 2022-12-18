@@ -21,6 +21,7 @@ func (g *GRPC) GetUserEmail(ctx context.Context, request *gen.GetUserEmailReques
 		UserUUID: request.UserUuid,
 	}, &canUserGetEmail{})
 	if err != nil {
+		g.logger.Error("failed to get user: %s", err.Error())
 		return nil, err
 	}
 
