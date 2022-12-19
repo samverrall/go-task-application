@@ -7,6 +7,12 @@ build-task-api:
 lint-user: 
 	cd ./user-service && golangci-lint --enable gosec,misspell run ./... &&	go test --race -v ./...
 
+lint-gateway: 
+	cd ./gateway-service && golangci-lint --enable gosec,misspell run ./... &&	go test --race -v ./...
+
+build-gateway:
+	go build -o ./gateway-service-bin github.com/samverrall/go-task-application/gateway-service/cmd
+
 user-gen-proto:
 	cd ./user-service/internal/adapters/left/grpc && protoc --go_out=./gen --go_opt=paths=source_relative --go-grpc_out=./gen --go-grpc_opt=paths=source_relative ./proto/*.proto
 
