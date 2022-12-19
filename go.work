@@ -6,4 +6,5 @@ use (
 	./logger
 	./utils
 	./task-application-proto
+	./gateway-service
 )
