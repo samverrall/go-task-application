@@ -1,8 +1,4 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
-
+name: Go services build and test.
 on:
   push:
     branches: [ "main" ]
@@ -11,9 +7,7 @@ on:
       - "task-service/**"
   pull_request:
     branches: [ "main" ]
-
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -24,8 +18,18 @@ jobs:
       with:
         go-version: 1.19
 
-    - name: Build
+    - name: Build user-service
+      working-directory: "user-service"
       run: go build -v ./...
 
-    - name: Test
+    - name: Test user-service
+      working-directory: "user-service"
+      run: go test -v ./...
+
+    - name: Build task-service 
+      working-directory: "task-service"
+      run: go build -v ./...
+
+    - name: Test task-service
+      working-directory: "task-service"
       run: go test -v ./...
