@@ -5,17 +5,23 @@ import (
 	"errors"
 	"flag"
 	"net/http"
+	"time"
 
 	"github.com/samverrall/go-task-application/gateway-service/gateway"
 	"github.com/samverrall/go-task-application/gateway-service/server"
 	"github.com/samverrall/go-task-application/logger"
 )
 
+var opts struct {
+	server struct {
+		host string
+		port int
+	}
+}
+
 func main() {
-	var host string
-	var port int
-	flag.StringVar(&host, "host", "127.0.0.1", "Host to start the gateway HTTP server on")
-	flag.IntVar(&port, "port", 5000, "Port to start gateway HTTP server on")
+	flag.StringVar(&opts.server.host, "host", "127.0.0.1", "Host to start the gateway HTTP server on")
+	flag.IntVar(&opts.server.port, "port", 5000, "Port to start gateway HTTP server on")
 	flag.Parse()
 
 	ctx := context.Background()
@@ -35,13 +41,15 @@ func main() {
 
 	mux.Handle("/", gatewayHandler)
 
-	s := server.New(log, host, port, mux)
+	s := server.New(log, opts.server.host, opts.server.port, mux)
 
 	go func() {
 		<-ctx.Done()
 		log.Info("Shutting down the http server")
 
-		if err := s.Shutdown(context.Background()); err != nil {
+		ctxShutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		if err := s.Shutdown(ctxShutdown); err != nil {
 			log.Error("Failed to shutdown http server: %v", err)
 		}
 	}()

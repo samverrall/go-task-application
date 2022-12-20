@@ -35,7 +35,7 @@ func New(logger logger.Logger, host string, port int, mux *http.ServeMux) *Serve
 
 // Start starts the HTTP server and listens on the server's address.
 func (s *Server) Start(ctx context.Context) error {
-	if err := s.server.ListenAndServe(); errors.Is(err, http.ErrServerClosed) {
+	if err := s.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		s.logger.Error("Failed to listen and serve: %v", err)
 		return err
 	}
