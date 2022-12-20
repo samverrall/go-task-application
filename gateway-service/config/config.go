@@ -16,9 +16,8 @@ func New(configPath string) *Config {
 }
 
 func (c *Config) ParseConfig() error {
-	c.AddConfigPath(c.path)
+	c.SetConfigFile(c.path)
 	c.SetConfigType("yaml")
-	viper.SetConfigName("config")
 	if err := c.ReadInConfig(); err != nil {
 		return err
 	}
