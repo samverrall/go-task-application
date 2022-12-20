@@ -2,9 +2,11 @@ package gateway
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	gwruntime "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/samverrall/go-task-application/gateway-service/config"
 	"github.com/samverrall/go-task-application/logger"
 	"github.com/samverrall/go-task-application/task-application-proto/gen"
 	"google.golang.org/grpc"
@@ -13,12 +15,14 @@ import (
 
 type Gateway struct {
 	logger logger.Logger
+	config *config.Config
 }
 
 // New returns a pointer to a new Gateway
-func New(log logger.Logger) *Gateway {
+func New(log logger.Logger, c *config.Config) *Gateway {
 	return &Gateway{
 		logger: log,
+		config: c,
 	}
 }
 
@@ -26,11 +30,15 @@ func (g *Gateway) Handler(ctx context.Context, opts []gwruntime.ServeMuxOption) 
 	mux := gwruntime.NewServeMux(opts...)
 	dialOpts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	// TODO: Remove hard coded endpoints, read from a config instead.
-	err := gen.RegisterUserHandlerFromEndpoint(ctx, mux, "127.0.0.1:8000", dialOpts)
+	userServiceAddr := buildAddress(g.config.GetString("user-service.host"), g.config.GetInt("user-service.port"))
+	err := gen.RegisterUserHandlerFromEndpoint(ctx, mux, userServiceAddr, dialOpts)
 	if err != nil {
 		return nil, err
 	}
 
 	return mux, nil
+}
+
+func buildAddress(host string, port int) string {
+	return fmt.Sprintf("%s:%d", host, port)
 }

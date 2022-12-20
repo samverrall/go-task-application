@@ -7,12 +7,21 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/samverrall/go-task-application/gateway-service/config"
 	"github.com/samverrall/go-task-application/gateway-service/gateway"
 	"github.com/samverrall/go-task-application/gateway-service/server"
 	"github.com/samverrall/go-task-application/logger"
 )
 
 var opts struct {
+	log struct {
+		level string
+	}
+
+	config struct {
+		path string
+	}
+
 	server struct {
 		host string
 		port int
@@ -20,25 +29,34 @@ var opts struct {
 }
 
 func main() {
+	flag.StringVar(&opts.config.path, "config-path", "../config/local.config.yaml", "Level of output logs written to stdout")
+	flag.StringVar(&opts.log.level, "log-level", "info", "Level of output logs written to stdout")
 	flag.StringVar(&opts.server.host, "host", "127.0.0.1", "Host to start the gateway HTTP server on")
 	flag.IntVar(&opts.server.port, "port", 5000, "Port to start gateway HTTP server on")
 	flag.Parse()
 
-	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	log := logger.New("info")
+	log := logger.New(opts.log.level)
 
-	gw := gateway.New(log)
+	config := config.New(opts.config.path)
+	if err := config.ParseConfig(); err != nil {
+		log.Fatal("failed to parse config: %s", err.Error())
+	}
 
+	// Initialise new gateway
+	gw := gateway.New(log, config)
+
+	// Return the mux gateway handler
 	gatewayHandler, err := gw.Handler(ctx, nil)
 	if err != nil {
 		log.Fatal("failed to create gateway handler: %s", err.Error())
 	}
 
 	mux := http.NewServeMux()
-
+	// Register the gateway handler on the root so that request paths can be
+	// forwarded to our gRPC proxy.
 	mux.Handle("/", gatewayHandler)
 
 	s := server.New(log, opts.server.host, opts.server.port, mux)

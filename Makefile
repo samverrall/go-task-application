@@ -10,6 +10,9 @@ lint-user:
 lint-gateway: 
 	cd ./gateway-service && golangci-lint --enable gosec,misspell run ./... &&	go test --race -v ./...
 
+run-gateway: 
+	./gateway-service-bin -log-level "debug" -config-path "/Users/samverrall/projects/gateway-service/config/local.config"
+
 build-gateway:
 	go build -o ./gateway-service-bin github.com/samverrall/go-task-application/gateway-service/cmd
 
