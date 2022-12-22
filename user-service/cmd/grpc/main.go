@@ -16,13 +16,24 @@ import (
 	sqliteconn "github.com/samverrall/go-task-application/user-service/pkg/sqlite"
 )
 
-func run(grpcPort int, database string) error {
+var opts struct {
+	database struct {
+		dir string
+	}
+
+	server struct {
+		port int
+		host string
+	}
+}
+
+func run() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	log := logger.New("debug")
+	log := logger.New("info")
 
-	sqliteAdapter, err := sqliteconn.Connect(database)
+	sqliteAdapter, err := sqliteconn.Connect(opts.database.dir)
 	if err != nil {
 		return fmt.Errorf("%w: failed to connect to sqlite adapter", err)
 	}
@@ -38,8 +49,8 @@ func run(grpcPort int, database string) error {
 	userSvc := user.NewService(userRepo, log)
 
 	// Init gRPC adapter and inject business logic
-	grpcAdapter := grpc.New(userSvc, log, grpcPort)
-	if err := grpcAdapter.Run(); err != nil {
+	grpcAdapter := grpc.New(userSvc, log, opts.server.host, opts.server.port)
+	if err := grpcAdapter.Run(ctx); err != nil {
 		return err
 	}
 
@@ -56,12 +67,11 @@ func run(grpcPort int, database string) error {
 }
 
 func main() {
-	var port int
-	var dbDir string
-	flag.IntVar(&port, "grpc-port", 8000, "The port to run the gRPC server on")
-	flag.StringVar(&dbDir, "database-dir", "./users.db", "The directory store application data")
+	flag.StringVar(&opts.server.host, "host", "127.0.0.1", "The host to run the gRPC server on")
+	flag.IntVar(&opts.server.port, "port", 8002, "The port to run the gRPC server on")
+	flag.StringVar(&opts.database.dir, "database-dir", "./users.db", "The directory store application data")
 	flag.Parse()
-	if err := run(port, dbDir); err != nil {
+	if err := run(); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -49,7 +49,7 @@ func main() {
 	gw := gateway.New(log, config)
 
 	// Return the mux gateway handler
-	gatewayHandler, err := gw.Handler(ctx, nil)
+	gatewayHandler, err := gw.Handler(ctx)
 	if err != nil {
 		log.Fatal("failed to create gateway handler: %s", err.Error())
 	}

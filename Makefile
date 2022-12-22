@@ -1,3 +1,7 @@
+run: 
+	./gateway-service-bin -port 8001 -log-level "debug" -config-path "/Users/samverrall/projects/go-task-application/gateway-service/config/local.config.yaml" && ./user-service-grpc -port 8002
+
+
 lint-task: 
 	cd ./task-service && golangci-lint --enable gosec,misspell run ./... &&	go test --race -v ./...
 

@@ -18,8 +18,6 @@
   "paths": {
     "/v1/api/users/{userUuid}": {
       "get": {
-        "summary": "Gets a user",
-        "description": "Gets a users information",
         "operationId": "User_GetUserEmail",
         "responses": {
           "200": {

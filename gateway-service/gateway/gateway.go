@@ -26,8 +26,14 @@ func New(log logger.Logger, c *config.Config) *Gateway {
 	}
 }
 
-func (g *Gateway) Handler(ctx context.Context, opts []gwruntime.ServeMuxOption) (http.Handler, error) {
-	mux := gwruntime.NewServeMux(opts...)
+func (g *Gateway) newServeMux() *gwruntime.ServeMux {
+	return gwruntime.NewServeMux(
+		gwruntime.WithForwardResponseOption(g.httpResponseModifier),
+	)
+}
+
+func (g *Gateway) Handler(ctx context.Context) (http.Handler, error) {
+	mux := g.newServeMux()
 	dialOpts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	userServiceAddr := buildAddress(g.config.GetString("user-service.host"), g.config.GetInt("user-service.port"))
@@ -35,7 +41,6 @@ func (g *Gateway) Handler(ctx context.Context, opts []gwruntime.ServeMuxOption) 
 	if err != nil {
 		return nil, err
 	}
-
 	return mux, nil
 }
 

@@ -3,7 +3,6 @@ syntax = "proto3";
 package go.taskapplication.proto.userapi;
 
 import "google/api/annotations.proto";
-import "protoc-gen-openapiv2/options/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/samverrall/go-task-application/task-application-proto/gen";
@@ -20,10 +19,6 @@ service User {
   rpc GetUserEmail(GetUserEmailRequest) returns (GetUserEmailResponse) {
     option (google.api.http) = {
       get: "/v1/api/users/{user_uuid}"
-    };
-    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "Gets a user"
-      description: "Gets a users information"
     };
   }
 }

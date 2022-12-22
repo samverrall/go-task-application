@@ -2,10 +2,12 @@ package sqlite
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	"github.com/samverrall/go-task-application/user-service/internal/port/domain"
 	"github.com/samverrall/go-task-application/user-service/internal/port/domain/user"
+	"github.com/samverrall/go-task-application/user-service/internal/port/repository"
 	"gorm.io/gorm"
 )
 
@@ -43,7 +45,12 @@ func (ur *UserRepo) Add(ctx context.Context, in user.User) (*user.User, error) {
 
 func (ur *UserRepo) Get(ctx context.Context, uuid uuid.UUID) (*user.User, error) {
 	result := gormUser{}
-	if err := ur.db.Where("uuid = ?", uuid.String()).Find(&result).Error; err != nil {
+	err := ur.db.First(&result, "uuid = ?", uuid.String()).Error
+	switch {
+	case errors.Is(err, gorm.ErrRecordNotFound):
+		return nil, repository.ErrUserNotFound
+
+	case err != nil:
 		return nil, err
 	}
 	return gormToUser(result), nil
