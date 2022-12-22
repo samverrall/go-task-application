@@ -54,12 +54,7 @@ func main() {
 		log.Fatal("failed to create gateway handler: %s", err.Error())
 	}
 
-	mux := http.NewServeMux()
-	// Register the gateway handler on the root so that request paths can be
-	// forwarded to our gRPC proxy.
-	mux.Handle("/", gatewayHandler)
-
-	s := server.New(log, opts.server.host, opts.server.port, mux)
+	s := server.New(log, opts.server.host, opts.server.port, gatewayHandler)
 
 	go func() {
 		<-ctx.Done()
