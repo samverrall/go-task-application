@@ -16,6 +16,6 @@ func userToGorm(u user.User) gormUser {
 	return gormUser{
 		UUID:     u.UUID.String(),
 		Email:    u.Email.String(),
-		Password: u.Password.String(),
+		Password: u.HashedPassword.String(),
 	}
 }

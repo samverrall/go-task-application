@@ -16,7 +16,7 @@ type RegisterRequest struct {
 func (us *UserService) Register(ctx context.Context, in RegisterRequest) error {
 	log.Info("userService.Register Invoked")
 
-	password, err := user.NewPassword(in.Password)
+	password, err := user.NewHashedPassword(in.Password, us.hasher)
 	if err != nil {
 		return err
 	}

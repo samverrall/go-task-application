@@ -13,6 +13,7 @@ import (
 	"github.com/samverrall/go-task-application/user-service/internal/adapters/left/grpc"
 	"github.com/samverrall/go-task-application/user-service/internal/adapters/right/repo/user/sqlite"
 	"github.com/samverrall/go-task-application/user-service/internal/port/service/user"
+	"github.com/samverrall/go-task-application/user-service/pkg/hasher/argon2"
 	sqliteconn "github.com/samverrall/go-task-application/user-service/pkg/sqlite"
 )
 
@@ -45,8 +46,10 @@ func run() error {
 		return err
 	}
 
+	argonHasher := argon2.New()
+
 	// Init business logic
-	userSvc := user.NewService(userRepo, log)
+	userSvc := user.NewService(userRepo, log, argonHasher)
 
 	// Init gRPC adapter and inject business logic
 	grpcAdapter := grpc.New(userSvc, log, opts.server.host, opts.server.port)

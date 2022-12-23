@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/samverrall/go-task-application/user-service/internal/port/domain"
 	"github.com/samverrall/go-task-application/user-service/internal/port/domain/user"
+	"github.com/samverrall/go-task-application/user-service/pkg/hasher/argon2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -40,7 +41,8 @@ func addUser(ctx context.Context, t *testing.T, users domain.UserRepo, email, pa
 		return nil, err
 	}
 
-	userPassword, err := user.NewPassword(password)
+	hasher := argon2.New()
+	userPassword, err := user.NewHashedPassword(password, hasher)
 	if err != nil {
 		t.Error(err)
 		return nil, err

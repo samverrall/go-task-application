@@ -6,15 +6,15 @@ import (
 
 // User is a aggregate root domain type
 type User struct {
-	UUID     uuid.UUID
-	Email    Email
-	Password Password
+	UUID           uuid.UUID
+	Email          Email
+	HashedPassword HashedPassword
 }
 
-func New(id uuid.UUID, email Email, password Password) User {
+func New(id uuid.UUID, email Email, password HashedPassword) User {
 	return User{
-		UUID:     id,
-		Email:    email,
-		Password: password,
+		UUID:           id,
+		Email:          email,
+		HashedPassword: password,
 	}
 }
