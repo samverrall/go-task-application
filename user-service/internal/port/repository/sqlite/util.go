@@ -7,8 +7,9 @@ import (
 
 func gormToUser(u gormUser) *user.User {
 	return &user.User{
-		UUID:  uuid.MustParse(u.UUID),
-		Email: user.Email(u.Email),
+		UUID:           uuid.MustParse(u.UUID),
+		Email:          user.Email(u.Email),
+		HashedPassword: user.HashedPassword(u.Password),
 	}
 }
 
