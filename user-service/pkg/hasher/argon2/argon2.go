@@ -1,11 +1,11 @@
 package argon2
 
 import (
+	"crypto/rand"
 	"crypto/subtle"
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"math/rand"
 	"strings"
 
 	"golang.org/x/crypto/argon2"
