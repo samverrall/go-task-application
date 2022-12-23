@@ -11,14 +11,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func RunUserTests(t *testing.T, tasks domain.UserRepo) {
+func RunUserTests(t *testing.T, users domain.UserRepo) {
 	ctx := context.Background()
 
-	newUser, err := addUser(ctx, t, tasks, "foo@foo.com", "password")
+	newUser, err := addUser(ctx, t, users, "foo@foo.com", "password")
 	assert.NoError(t, err, "addUser failure")
 
-	_, err = getUser(ctx, t, tasks, newUser.UUID.String())
+	_, err = getUser(ctx, t, users, newUser.UUID.String())
 	assert.NoError(t, err, "getUser failure")
+
+	_, err = getUserByEmail(ctx, t, users, "foo@foo.com")
+	assert.NoError(t, err, "getUserByEmail failure")
+}
+
+func getUserByEmail(ctx context.Context, t *testing.T, users domain.UserRepo, email string) (*user.User, error) {
+	t.Helper()
+
+	domainEmail, err := user.NewEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	return users.GetByEmail(ctx, domainEmail)
 }
 
 func getUser(ctx context.Context, t *testing.T, users domain.UserRepo, uuidIn string) (*user.User, error) {

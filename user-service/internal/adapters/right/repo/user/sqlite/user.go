@@ -55,3 +55,16 @@ func (ur *UserRepo) Get(ctx context.Context, uuid uuid.UUID) (*user.User, error)
 	}
 	return gormToUser(result), nil
 }
+
+func (ur *UserRepo) GetByEmail(ctx context.Context, email user.Email) (*user.User, error) {
+	result := gormUser{}
+	err := ur.db.First(&result, "email = ?", email.String()).Error
+	switch {
+	case errors.Is(err, gorm.ErrRecordNotFound):
+		return nil, repository.ErrUserNotFound
+
+	case err != nil:
+		return nil, err
+	}
+	return gormToUser(result), nil
+}

@@ -10,4 +10,5 @@ import (
 type UserRepo interface {
 	Get(context.Context, uuid.UUID) (*user.User, error)
 	Add(context.Context, user.User) (*user.User, error)
+	GetByEmail(context.Context, user.Email) (*user.User, error)
 }
